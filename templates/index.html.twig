@@ -1,0 +1,29 @@
+{% extends "layout.html.twig" %}
+
+{% block title %}Home{% endblock %}
+
+
+
+{% block content %}
+
+
+{% for billet in billets %}
+<div class="row billet">
+    <div class="col-xs-12">
+        <div class="row titleBillet">
+            <a href="{{ path('billet', { 'id': billet.id }) }}"><span class="col-xs-12"> {{ billet.titre }} - {{ billet.datecreation }} </span></a>
+        </div>
+        <div class="row contentBillet">
+            <div class="col-xs-12">
+                <img src="{{ app.request.basepath }}/img/profilPicture.jpg" alt="image billet" class="col-xs-offset-1 col-xs-10 col-md-offset-0 col-md-2" />
+
+                <p class="col-xs-12 col-md-10">{{ billet.contenu }}</p>
+                <span class="col-xs-12 col-md-7 text-right"><a href="">Commentaires (125)</a></span>
+                <a href="{{ path('billet', { 'id': billet.id }) }}"><button class="btn btn-success col-xs-offset-2 col-md-offset-1">Lire la suite...</button></a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+{% endblock %}

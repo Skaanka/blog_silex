@@ -1,0 +1,101 @@
+#contentPage h1 {
+    font-size: 24px;
+}
+
+.panel i {
+    color: white;
+}
+.panel-info>.panel-heading, .panel-danger>.panel-heading  {
+    background-color: grey;
+}
+
+/* Skill bar */
+.separatorSkill {
+    border-bottom: 1px solid black;
+    padding: 5px;
+    font-size: .9em;
+}
+
+#contentPage h2 {
+    font-size: 16px;
+    margin-top: 0px;
+    margin-left: 5px;
+    color: #777777;
+}
+
+
+.progress {
+    position: relative;
+	height: 25px;
+}
+.progress > .progress-type {
+	position: absolute;
+	left: 0px;
+	font-weight: 800;
+	padding: 0px 10px 0px 10px;
+	color: rgb(255, 255, 255);
+	background-color: rgba(25, 25, 25, 0.2);
+    height: 25px;
+    line-height: 25px;
+}
+.progress > .progress-completed {
+	position: absolute;
+	right: 0px;
+	font-weight: 800;
+	padding: 0px 5px 0px;
+    height: 25px;
+    line-height: 25px;
+}
+
+/* profil card */
+.alignVcard {
+    margin-top: 50px;
+}
+
+.miniReseauxSoc { 
+    border-radius: 50%; 
+    width:32px; 
+    height:32px; 
+    line-height:18px;  
+    background-color: rgba(40,40,40,0.8);
+    border: 2px solid rgba(40,40,40,0.4);
+    padding: 5px 5px;
+}
+.miniReseauxSoc:nth-child(even) {  
+    background-color: rgba(140,140,140,0.8);
+    border: 2px solid rgba(140,140,140,0.4);
+}
+
+.miniReseauxSoc:first-child:hover{
+    background-color: #3A5795;
+    border: 2px solid white;
+}
+.miniReseauxSoc:nth-child(2):hover{
+    background-color: #28A9E0;
+    border: 2px solid white;
+}
+.miniReseauxSoc:nth-child(3):hover{
+    background-color: #0177B5;
+    border: 2px solid white;
+}
+.miniReseauxSoc:nth-child(4):hover{
+    background-color: #DF4032;
+    border: 2px solid white;
+}
+.miniReseauxSoc:last-child:hover{
+    background-color: #563F7B;
+    border: 2px solid white;
+}
+
+/* page header (ligne de separation)*/ 
+.separationColor {
+    border-color: darkgoldenrod;
+    height: 10px;
+    line-height: 10px;
+    margin-top: 50px;
+    margin-bottom: 60px;
+}
+
+
+
+
