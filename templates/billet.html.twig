@@ -46,9 +46,26 @@
     Aucun commentaire...
     {% endfor %}
 
-    <h3>Add a comment (TODO STYLE)</h3>
-    {% if app.user and is_granted('IS_AUTHENTICATED_FULLY') %}
-        Soon!
+    <h3>Add a commentaire (TODO STYLE)</h3>
+    {% if commentaireForm %}
+        {{ form_start(commentaireForm) }}
+            <div class="form-group">
+                {{ form_errors(commentaireForm.contenu) }}
+                {{ form_widget(commentaireForm.contenu, { 'attr':  {
+                    'rows': '4',
+                    'class': 'form-control',
+                    'placeholder': 'Votre commentaire'
+                }}) }}
+            </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary" value="Envoyer commentaire" />
+            </div>
+        {{ form_end(commentaireForm) }}
+        {% for flashMessage in app.session.flashbag.get('success') %}
+            <div class="alert alert-success">
+                {{ flashMessage }}
+            </div>
+        {% endfor %}
     {% else %}
         <a href="{{ path('login') }} ">Log in</a> to add comments.
     {% endif %}

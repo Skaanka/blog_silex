@@ -28,6 +28,9 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
     ),
 ));
 
+$app->register(new Silex\Provider\FormServiceProvider());
+$app->register(new Silex\Provider\TranslationServiceProvider());
+
 // Register services.
 $app['dao.billet'] = $app->share(function ($app) {
     return new DAO\BilletDAO($app['db']);

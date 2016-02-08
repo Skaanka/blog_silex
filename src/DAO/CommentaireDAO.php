@@ -25,6 +25,7 @@ class CommentaireDAO extends DAO
         $this->userDAO = $userDAO;
     }
 
+
     /**
      * Return a list of all comments for an billet, sorted by date (most recent last).
      *
@@ -52,6 +53,34 @@ class CommentaireDAO extends DAO
         }
         return $commentaires;
     }
+
+
+    /**
+     * Saves a commentaire into the database.
+     *
+     * @param \Manager\Commentaire $commentaire The commentaire to save
+     */
+    public function save(Commentaire $commentaire) {
+        $commentaireData = array(
+            'id_billet' => $commentaire->getBillet()->getId(),
+            'user_id' => $commentaire->getAuteur()->getId(),
+            'contenu' => $commentaire->getContenu(),
+            );
+
+        if ($commentaire->getId()) {
+            // The commentaire has already been saved : update it
+            $this->getDb()->update('commentaires', $commentaireData, array('com_id' => $commentaire->getId()));
+        } else {
+            // The commentaire has never been saved : insert it
+            $this->getDb()->insert('commentaires', $commentaireData);
+            // Get the id of the newly created commentaire and set it on the entity.
+            $id = $this->getDb()->lastInsertId();
+            $commentaire->setId($id);
+        }
+    }
+
+
+
 
     /**
      * Creates an Comment object based on a DB row.
