@@ -42,6 +42,42 @@ class BilletDAO extends DAO
             throw new \Exception("No billet matching id " . $id);
     }
 
+
+    /**
+     * Saves an billet into the database.
+     *
+     * @param \Manager\Billet $billet The billet to save
+     */
+    public function save(Billet $billet) {
+        $billetData = array(
+            'titre' => $billet->getTitre(),
+            'contenu' => $billet->getContenu(),
+            );
+
+        if ($billet->getId()) {
+            // The billet has already been saved : update it
+            $this->getDb()->update('billets', $billetData, array('id_billet' => $billet->getId()));
+        } else {
+            // The billet has never been saved : insert it
+            $this->getDb()->insert('billets', $billetData);
+            // Get the id of the newly created billet and set it on the entity.
+            $id = $this->getDb()->lastInsertId();
+            $billet->setId($id);
+        }
+    }
+
+    /**
+     * Removes an billet from the database.
+     *
+     * @param integer $id The billet id.
+     */
+    public function delete($id) {
+        // Delete the billet
+        $this->getDb()->delete('billets', array('id_billet' => $id));
+    }
+
+
+
     /**
      * Creates an Billet object based on a DB row.
      *

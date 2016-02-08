@@ -25,6 +25,23 @@ class CommentaireDAO extends DAO
         $this->userDAO = $userDAO;
     }
 
+    /**
+     * Returns a list of all comments, sorted by date (most recent first).
+     *
+     * @return array A list of all comments.
+     */
+    public function findAll() {
+        $sql = "SELECT * FROM commentaires ORDER BY user_id DESC";
+        $result = $this->getDb()->fetchAll($sql);
+
+        // Convert query result to an array of domain objects
+        $entities = array();
+        foreach ($result as $row) {
+            $id = $row['id'];
+            $entities[$id] = $this->buildDomainObject($row);
+        }
+        return $entities;
+    }
 
     /**
      * Return a list of all comments for an billet, sorted by date (most recent last).
@@ -69,7 +86,7 @@ class CommentaireDAO extends DAO
 
         if ($commentaire->getId()) {
             // The commentaire has already been saved : update it
-            $this->getDb()->update('commentaires', $commentaireData, array('com_id' => $commentaire->getId()));
+            $this->getDb()->update('commentaires', $commentaireData, array('id' => $commentaire->getId()));
         } else {
             // The commentaire has never been saved : insert it
             $this->getDb()->insert('commentaires', $commentaireData);
@@ -77,6 +94,53 @@ class CommentaireDAO extends DAO
             $id = $this->getDb()->lastInsertId();
             $commentaire->setId($id);
         }
+    }
+
+    /**
+     * Returns a Commentaire matching the supplied id.
+     *
+     * @param integer $id The Commentaire id
+     *
+     * @return \Manager\Commentaire|throws an exception if no matching Commentaire is found
+     */
+    public function find($id) {
+        $sql = "SELECT * FROM commentaires WHERE id=?";
+        $row = $this->getDb()->fetchAssoc($sql, array($id));
+
+        if ($row)
+            return $this->buildDomainObject($row);
+        else
+            throw new \Exception("No Commentaire matching id " . $id);
+    }
+
+
+    /**
+     * Removes a Commentaire from the database.
+     *
+     * @param @param integer $id The Commentaire id
+     */
+    public function delete($id) {
+        // Delete the Commentaire
+        $this->getDb()->delete('commentaires', array('id' => $id));
+    }
+
+    /**
+     * Removes all commentaires for a user
+     *
+     * @param integer $userId The id of the user
+     */
+    public function deleteAllByUser($userId) {
+        $this->getDb()->delete('commentaires', array('user_id' => $userId));
+    }
+
+
+    /**
+     * Removes all commentaires for an billet
+     *
+     * @param $billetId The id of the billet
+     */
+    public function deleteAllByBillet($billetId) {
+        $this->getDb()->delete('commentaires', array('id_billet' => $billetId));
     }
 
 
@@ -98,7 +162,7 @@ class CommentaireDAO extends DAO
             // Find and set the associated billet
             $billetId = $row['id_billet'];
             $billet = $this->billetDAO->find($billetId);
-            $commentaire->setArticle($billet);
+            $commentaire->setBillet($billet);
         }
         if (array_key_exists('user_id', $row)) {
             // Find and set the associated author

@@ -28,6 +28,67 @@ class UserDAO extends DAO implements UserProviderInterface
     }
 
     /**
+     * Returns a list of all users, sorted by role and name.
+     *
+     * @return array A list of all users.
+     */
+    public function findAll() {
+        $sql = "SELECT * FROM users ORDER BY role, pseudo";
+        $result = $this->getDb()->fetchAll($sql);
+
+        // Convert query result to an array of domain objects
+        $entities = array();
+        foreach ($result as $row) {
+            $id = $row['user_id'];
+            $entities[$id] = $this->buildDomainObject($row);
+        }
+        return $entities;
+    }
+
+
+    /**
+     * Saves a user into the database.
+     *
+     * @param \Manager\User $user The user to save
+     */
+    public function save(User $user) {
+        $userData = array(
+            'pseudo' => $user->getUsername(),
+            'salt' => $user->getSalt(),
+            'password' => $user->getPassword(),
+            'role' => $user->getRole(),
+            'prenom' => $user->getUserprenom(),
+            'nom' => $user->getUserom(),
+            'mail' => $user->getUsermail(),
+            'date_inscription' => $user->getUserdateinscription()
+            );
+
+        if ($user->getId()) {
+            // The user has already been saved : update it
+            $this->getDb()->update('users', $userData, array('user_id' => $user->getId()));
+        } else {
+            // The user has never been saved : insert it
+            $this->getDb()->insert('users', $userData);
+            // Get the id of the newly created user and set it on the entity.
+            $id = $this->getDb()->lastInsertId();
+            $user->setId($id);
+        }
+    }
+
+    /**
+     * Removes a user from the database.
+     *
+     * @param @param integer $id The user id.
+     */
+    public function delete($id) {
+        // Delete the user
+        $this->getDb()->delete('users', array('user_id' => $id));
+    }
+
+
+
+
+    /**
      * {@inheritDoc}
      */
     public function loadUserByUsername($username)
