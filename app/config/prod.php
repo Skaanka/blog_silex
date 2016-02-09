@@ -11,5 +11,5 @@ $app['db.options'] = array(
     'password' => '',
 );
 
-
-// Paramétre de la BDD
+// define log level
+$app['monolog.level'] = 'WARNING';
